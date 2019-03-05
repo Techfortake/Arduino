@@ -1,0 +1,32 @@
+const int pin_trig = 7;
+const int pin_echo = 8;
+void setup() {
+  // initialize serial communication:
+  Serial.begin(9600);
+  pinMode(pin_trig,OUTPUT);
+  pinMode(pin_echo,INPUT);
+}
+void loop()
+{
+  long duration, distance_in_cm;
+  digitalWrite(pin_trig, LOW);
+  delayMicroseconds(2);
+  digitalWrite(pin_trig, HIGH);
+  delayMicroseconds(5);
+  digitalWrite(pin_trig, LOW);
+  // the duration of the trevelled wave to go and back
+  duration = pulseIn(pin_echo, HIGH);
+ // convert the duration into a distance
+  distance_in_cm = microsecondsToCentimeters(duration);
+  Serial.print(distance_in_cm);
+  Serial.print("cm");
+  Serial.println();
+  delay(100);
+}
+long microsecondsToCentimeters(long microseconds)
+{
+  // The speed of the sound is 340 m/s or 29 microseconds per centimeter.
+  // Since the sound travels out and back, so to find the distance of the
+  // object we take half of the distance travelled.
+  return microseconds / 29 / 2;
+}
